@@ -1,0 +1,103 @@
+model_version: 0.0.5.1
+gpu_id: '0'
+grad_accum_steps: 15
+save_per_step: 10000
+lr: 0.0005
+num_warmup_steps: 10
+num_epoch: 10
+log_interval: 2
+neg_loss_alpha: 1
+pos_neg_ratio: 5
+num_in_context_sample: 4
+save_path: mnt/data_10t/flan_t5_distill/checkpoints/
+base_model: google/flan-t5-base
+loss_type: match_distribution
+batch_mix_mode: fully_random
+gradient_clip_val: 5.0
+batch_size:
+  in_context_chain_of_thought: 2
+  in_context_answer_only: 10
+  zero_shot_chain_of_thought: 8
+  zero_shot_answer_only: 20
+device_map:
+  0:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  1:
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  2:
+  - 16
+  - 17
+  - 18
+  - 19
+  - 20
+  - 21
+  - 22
+  - 23
+data_formats:
+- zero_shot_answer_only
+- zero_shot_chain_of_thought
+- in_context_answer_only
+- in_context_chain_of_thought
+
+1
+
+2
+
+04/18/2024, 21:00:21 Building batches ... 
+04/18/2024, 21:00:21 number of batches:
+04/18/2024, 21:00:21 zero_shot_answer_only: 24
+04/18/2024, 21:00:21 zero_shot_chain_of_thought: 1726
+04/18/2024, 21:00:21 in_context_answer_only: 48
+04/18/2024, 21:00:21 in_context_chain_of_thought: 6904
+3
+
+04/18/2024, 21:00:21 Loading the model ... 
+04/18/2024, 21:00:23 Model loaded in 1.7 seconds.
+04/18/2024, 21:00:24 Start trainig, 130530 / 15 = 8702 batches in total
+04/18/2024, 21:00:33 Epoch: 0, Iter: 29, Global step 2, Lr: 0.0001, Loss: 1.1156
+04/18/2024, 21:00:41 Epoch: 0, Iter: 59, Global step 4, Lr: 0.0002, Loss: 0.9644
+Error executing job with overrides: ['model_version=0.0.5.1', "gpu_id='0'", "base_model='google/flan-t5-base'", 'batch_size=11b', 'grad_accum_steps=15', 'save_per_step=10000', 'log_interval=2', 'lr=0.0005']
+Traceback (most recent call last):
+  File "/home/group2024-rqn/FlanT5-CoT-Specialization/train_distill_simple.py", line 184, in <module>
+    main()
+  File "/home/group2024-rqn/miniconda3/envs/rqn/lib/python3.10/site-packages/hydra/main.py", line 94, in decorated_main
+    _run_hydra(
+  File "/home/group2024-rqn/miniconda3/envs/rqn/lib/python3.10/site-packages/hydra/_internal/utils.py", line 394, in _run_hydra
+    _run_app(
+  File "/home/group2024-rqn/miniconda3/envs/rqn/lib/python3.10/site-packages/hydra/_internal/utils.py", line 457, in _run_app
+    run_and_report(
+  File "/home/group2024-rqn/miniconda3/envs/rqn/lib/python3.10/site-packages/hydra/_internal/utils.py", line 223, in run_and_report
+    raise ex
+  File "/home/group2024-rqn/miniconda3/envs/rqn/lib/python3.10/site-packages/hydra/_internal/utils.py", line 220, in run_and_report
+    return func()
+  File "/home/group2024-rqn/miniconda3/envs/rqn/lib/python3.10/site-packages/hydra/_internal/utils.py", line 458, in <lambda>
+    lambda: hydra.run(
+  File "/home/group2024-rqn/miniconda3/envs/rqn/lib/python3.10/site-packages/hydra/_internal/hydra.py", line 132, in run
+    _ = ret.return_value
+  File "/home/group2024-rqn/miniconda3/envs/rqn/lib/python3.10/site-packages/hydra/core/utils.py", line 260, in return_value
+    raise self._return_value
+  File "/home/group2024-rqn/miniconda3/envs/rqn/lib/python3.10/site-packages/hydra/core/utils.py", line 186, in run_job
+    ret.return_value = task_function(task_cfg)
+  File "/home/group2024-rqn/FlanT5-CoT-Specialization/train_distill_simple.py", line 180, in main
+    train(args, tokenizer, model, dataset, train_batches, optimizer, scheduler)
+  File "/home/group2024-rqn/FlanT5-CoT-Specialization/train_distill_simple.py", line 109, in train
+    loss.backward()
+  File "/home/group2024-rqn/miniconda3/envs/rqn/lib/python3.10/site-packages/torch/_tensor.py", line 522, in backward
+    torch.autograd.backward(
+  File "/home/group2024-rqn/miniconda3/envs/rqn/lib/python3.10/site-packages/torch/autograd/__init__.py", line 266, in backward
+    Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 262.00 MiB. GPU 0 has a total capacity of 23.69 GiB of which 113.00 MiB is free. Process 512480 has 13.09 GiB memory in use. Including non-PyTorch memory, this process has 10.47 GiB memory in use. Of the allocated memory 9.65 GiB is allocated by PyTorch, and 530.96 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

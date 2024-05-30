@@ -1,0 +1,21 @@
+defaults:
+  - _self_
+  - device_map: 11b_inference
+  - iter: 3b # 3b, 780m
+  - batch_size: bbh_default # bbh_default, bbh_small
+  - override hydra/hydra_logging: disabled  
+  - override hydra/job_logging: disabled  
+
+model_version: "0.0.2.2.1"
+epoch: "0"
+base_model: mnt/data_10t/flan_t5_distill/checkpoints/${model_version}_epoch_${epoch}_
+model_size: 3b
+gpu_id: "0"
+tokenizer: google/flan-t5-xl
+prompt_mode: cot # cot or ao
+output_path: mnt/data_10t/flan_t5_distill/outputs/
+
+hydra:  
+  output_subdir: null  
+  run:  
+    dir: .
